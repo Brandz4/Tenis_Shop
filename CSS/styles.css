@@ -1,5 +1,5 @@
 :root{
-    --primario: #9C27B0;
+--primario: #9C27B0;
     --primarioOscuro:#89119d;
     --secundario:#FFCE00;
     --secundarioOscuro:rgb(233,287,2);
@@ -12,6 +12,8 @@
 html {
     box-sizing: border-box;
     font-size: 62.5%;
+    position: relative;
+    min-height: 100%;
 }
 *, *:before, *:after {
     box-sizing: inherit;
@@ -21,6 +23,8 @@ body{
     font-size: 1.6rem;
     background-color: var(--primario);
     line-height: 1.5; /*Propiedad de interlineado*/
+    margin: 0;
+    padding-bottom: 50px;
 }
 p{
     font-size: 1.8rem;
@@ -69,6 +73,10 @@ h3{ font-size: 2.4rem; }
     font-size: 2.2rem;
 }
 
+.main {
+    flex: 1;
+}
+
 /* Navegacion */
 .navegacion {
     background-color: var(--primarioOscuro);
@@ -84,6 +92,20 @@ h3{ font-size: 2.4rem; }
     font-size: 3rem;
     text-decoration: none; /* Quita la subrayado predeterminado de los enlaces */
     transition: color 0.3s ease; /* Agrega una transición suave al color */
+    position: relative;
+    display: inline-block;
+}
+
+.carrito-cantidad {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--secundario);
+    color: black;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .navegacion__enlace:hover {
@@ -118,6 +140,8 @@ h3{ font-size: 2.4rem; }
 }
 .producto__imagen {
     width: 100%;
+    height: 90%;
+    max-height: 375px;
 }
 .producto__nombre {
     font-size: 4rem;
@@ -143,11 +167,18 @@ h3{ font-size: 2.4rem; }
 }
 .grafico--camisas {
     grid-row: 2 / 3;
-    background-image: url(../FrontEndStore_inicio/img/grafico1.jpg);
+    background-image: url(../FrontEndStore_inicio/img/grafico2.webp);
 }
+
 .grafico--node {
     grid-row: 8 / 9;
-    background-image: url(../FrontEndStore_inicio/img/grafico2.jpg);
+    background-image: url(../FrontEndStore_inicio/img/grafico1.webp);
+}
+
+/* Estilos que no se aplican cuando el contenedor tiene la clase 'busqueda-en-uso' */
+.busqueda-en-uso .grafico--camisas,
+.busqueda-en-uso .grafico--node {
+    display: none; /* o cualquier otro estilo que desees aplicar */
 }
 @media (min-Width: 768px) {
     .grafico--node {
@@ -204,6 +235,7 @@ h3{ font-size: 2.4rem; }
     .camisas {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
+        align-items: center;
         column-gap: 2rem;
     }
 }
@@ -240,5 +272,224 @@ h3{ font-size: 2.4rem; }
 
 }
 
+/* Estilos para cada producto en el carrito */
+.producto-carrito {
+    position: relative; /* Establecer posición relativa para el contenedor */
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+    width: 100%; /* Ocupa toda la anchura disponible */
+    background-color: #ececec;
+    border-radius: 8px;
+    border-color: #000;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 20px; /* Espacio entre productos */
+}
+
+/* Estilos para la imagen del producto */
+.producto-carrito img {
+    max-width: 150px; /* Tamaño para la imagen */
+    border: 2px solid #000;
+    height: auto;
+    border-radius: 4px;
+    margin-right: 20px; /* Espacio entre la imagen y el texto */
+}
+
+/* Estilos para el contenido del producto */
+.detalle-producto {
+    flex-grow: 1; /* Ocupa todo el espacio disponible */
+}
+
+/* Estilos para los detalles del producto */
+.detalle-producto p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Estilos para el texto de la etiqueta de precio */
+.etiqueta-precio {
+    font-weight: bold;
+    color: #777;
+}
+
+/* Estilos para el texto de la etiqueta de nombre */
+.etiqueta-nombre {
+    font-weight: bold;
+    color: #777;
+}
+
+.btn-eliminar {
+    position: absolute; /* Establecer posición absoluta */
+    bottom: 5px; /* Espacio desde la parte inferior */
+    right: 5px; /* Espacio desde la parte derecha */
+    background-color: var(--secundario);
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilos para los botones */
+#btn-comprar,
+#btn-vaciar-carrito {
+    background-color: white;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* Añadimos un margen derecho para separar los botones */
+}
+
+#btn-comprar:hover,
+#btn-vaciar-carrito:hover {
+    background-color: var(--secundario);;
+}
 
 
+/* Estilos para el pop-up del formulario */
+.formulario-pop-up {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 500px;
+    width: 90%;
+    overflow-y: auto; /* Agregamos scroll vertical si el contenido excede el tamaño */
+    max-height: 80vh; /* Limitamos la altura máxima para que quepa en la pantalla */
+}
+
+/* Estilos para el contenedor del formulario */
+.formulario-contenedor {
+    margin: 0 auto;
+}
+
+/* Estilos para el botón de cerrar */
+.cerrar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Estilos para el título del formulario */
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Estilos para las secciones del formulario */
+.seccion-formulario {
+    margin-bottom: 30px;
+}
+
+/* Estilos para los campos del formulario */
+.campo {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="text"],
+input[type="text"],
+input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para el botón */
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block; /* Convertirlo en un elemento de bloque */
+    margin: 20px auto; /* Centrar horizontalmente con margen superior e inferior */
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Ajustar el estilo del datalist para alinear las sugerencias a la izquierda */
+#busquedas-previas {
+    text-align: left;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-contenido {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-contenido p {
+    color: black;
+}
+
+
+.cerrar-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.cerrar-modal:hover,
+.cerrar-modal:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

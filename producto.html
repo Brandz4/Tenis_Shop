@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FrontEnd Store</title>
+    <title>Double T Tennis Shop</title>
     <link rel="stylesheet" href="CSS/normalize.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,31 +21,43 @@
     <nav class="navegacion">
         <a class="navegacion__enlace navegacion__enlace--activo" href="index.html">Tienda</a>
         <a class="navegacion__enlace" href="nosotros.html">Nosotros</a>
-        <a class="navegacion__enlace" href="perfil.html">Perfil</a>
         <a class="navegacion__enlace" href="carrito.html">Carrito</a>
     </nav>
 
     <main class="contenedor">
-        <h1>React JS</h1> 
+        <h1 id="producto-nombre"></h1> 
 
         <div class="camisas">
-            <img class="camisa__imagen" src="FrontEndStore_inicio/img/3.jpg" alt="Imagen del Producto">
-
+            <img id="producto-imagen" class="producto__imagen" src="FrontEndStore_inicio/img/3.jpg" alt="Imagen del Producto">
             <div class="camisa__contenido">
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic magnam ea, enim quisquam expedita 
-                    quod totam? Mollitia, in velit, accusantium assumenda soluta voluptatibus est impedit autem officia 
-                    omnis repudiandae sapiente!</p>
+                <p id="producto-descripcion"></p>
 
-                    <form class="formulario">
-                        <select name="" id="" class="formulario__campo">
-                            <option value="" disabled selected>--Tallas--</option>
-                            <option value="">Chica</option>
-                            <option value="">Mediana</option>
-                            <option value="">Grande</option>
-                        </select>
-                        <input class="formulario__campo" type="number" placeholder="cantidad" min="1">
-                        <input class="formulario__submit" type="submit" value="Agragar al Carrito">
-                    </form>
+                <p id="producto-precio"></p>
+
+                <form class="formulario">
+                    <select name="talla" id="" class="formulario__campo">
+                        <option value="" disabled selected>--Tallas--</option>
+                        <option value="24 CM">24 CM</option>
+                        <option value="24.5 CM">24.5 CM</option>
+                        <option value="25 CM">25 CM</option>
+                        <option value="25.5 CM">25.5 CM</option>
+                        <option value="26 CM">26 CM</option>
+                        <option value="26.5 CM">26.5 CM</option>
+                        <option value="27 CM">27 CM</option>
+                        <option value="27.5 CM">27.5 CM</option>
+                        <option value="28 CM">28 CM</option>
+                        <option value="28.5 CM">28.5 CM</option>
+                        <option value="29 CM">29 CM</option>
+                        <option value="29.5 CM">29.5 CM</option>
+                        <option value="30 CM">30 CM</option>
+                        <option value="30.5 CM">30.5 CM</option>
+                        <option value="31 CM">31 CM</option>
+                        <option value="31.5 CM">31.5 CM</option>
+                        <option value="32 CM">32 CM</option>
+                    </select>                    
+                    <input name="cantidad" class="formulario__campo" type="number" placeholder="Cantidad" min="1">
+                    <input class="formulario__submit" type="button" value="Agregar al Carrito" onclick="agregarAlCarrito()">
+                </form>
             </div>
         </div>
     </main>
@@ -53,5 +65,7 @@
     <footer class="footer">
         <p class="footer__texto">Double T Tennis Shop - Todos los derechos reservados 2024.</p>
     </footer>
+
+    <script src="main.js"></script>
 </body>
 </html>
