@@ -1,4 +1,4 @@
-// Función para obtener los parámetros de la URL
+// Función para obtener los parámetros de la URL de cada producto
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
     let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -14,7 +14,7 @@ const imagenProducto = getParameterByName('imagen');
 const precioProducto = getParameterByName('precio');
 const descripcionProducto = getParameterByName('descripcion');
 
-// Actualizar el contenido de la página con los valores de los parámetros
+// Actualizar el contenido de la página producto con los valores de los parámetros
 if (nombreProducto) {
     document.getElementById('producto-nombre').textContent = nombreProducto;
 }
@@ -65,38 +65,42 @@ function actualizarCantidadCarrito() {
 // Llamar a la función para actualizar la cantidad al cargar la página
 document.addEventListener('DOMContentLoaded', actualizarCantidadCarrito);
 
-// Función para agregar productos al carrito
 function agregarAlCarrito() {
     // Obtener datos del producto del formulario
     const nombre = document.getElementById('producto-nombre').textContent;
     const imagen = document.getElementById('producto-imagen').src;
     const precio = document.getElementById('producto-precio').textContent;
     const talla = document.querySelector('.formulario__campo[name="talla"]').value;
-    const cantidad = document.querySelector('.formulario__campo[name="cantidad"]').value;
-    // Verificar si se ha seleccionado una talla y una cantidad
-    if (!talla.trim() || !cantidad.trim()) {
-        alert('Por favor selecciona una talla y una cantidad.');
-    } else {
-        // Construir objeto de producto
-        const producto = {
-            nombre: nombre,
-            imagen: imagen,
-            precio: precio,
-            talla: talla,
-            cantidad: cantidad
-        };
+    const cantidad = parseInt(document.querySelector('.formulario__campo[name="cantidad"]').value); // Parsear la cantidad como un número
 
+    // Verificar si se ha seleccionado una talla y una cantidad
+    if (!talla.trim() || isNaN(cantidad) || cantidad <= 0) { // Verificar si la cantidad es un número válido
+        alert('Por favor selecciona una talla y una cantidad válida.');
+    } else {
         // Obtener carrito del almacenamiento local o inicializar uno nuevo
         let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
         // Verificar si el producto ya existe en el carrito
         const indiceProductoExistente = carrito.findIndex(item => item.nombre === nombre && item.talla === talla);
         if (indiceProductoExistente !== -1) {
-            // Actualizar la cantidad del producto existente en el carrito
-            carrito[indiceProductoExistente].cantidad = (parseInt(carrito[indiceProductoExistente].cantidad) + parseInt(cantidad)).toString();
+            const cantidadTotalProducto = parseInt(carrito[indiceProductoExistente].cantidad) + cantidad;
+            // Verificar si la cantidad total excede 10
+            if (cantidadTotalProducto > 10) {
+                alert('No puedes agregar más de 10 elementos del mismo tipo.');
+                return; // Salir de la función sin agregar el producto al carrito
+            } else {
+                // Actualizar la cantidad del producto existente en el carrito
+                carrito[indiceProductoExistente].cantidad = cantidadTotalProducto.toString();
+            }
         } else {
             // Agregar producto al carrito
-            carrito.push(producto);
+            carrito.push({
+                nombre: nombre,
+                imagen: imagen,
+                precio: precio,
+                talla: talla,
+                cantidad: cantidad.toString()
+            });
         }
 
         // Guardar carrito en el almacenamiento local
@@ -140,7 +144,8 @@ function mostrarCarrito() {
                     <p><strong>Talla:</strong> ${producto.talla}</p>
                     <p><strong>Cantidad:</strong> ${producto.cantidad}</p>
                     <p><strong>Total Producto:</strong> ${precioTotalFormateado}</p>
-                    <button class="btn-eliminar" onclick="eliminarProducto('${producto.nombre}','${producto.talla}')">Eliminar</button>
+                    <button class="formulario__submit boton-carrito boton-carrito-eliminar" onclick="eliminarProducto('${producto.nombre}','${producto.talla}')">Eliminar</button>
+                    <button class="formulario__submit boton-carrito boton-carrito-eliminar" onclick="modificarCantidad('${producto.nombre}','${producto.talla}')">Modificar</button>
                 </div>
             </div>
         `;
@@ -157,6 +162,54 @@ function mostrarCarrito() {
         sumaTotalElement.textContent = '';
     }else{
         sumaTotalElement.textContent = `Total del carrito: ${sumaTotalFormateada}`;
+    }
+}
+
+function limitarCantidad() {
+    var cantidadInput = document.getElementById("cantidadInput");
+    if (parseInt(cantidadInput.value) > 10) {
+        cantidadInput.value = 10;
+    }
+}
+
+function modificarCantidad(nombreProducto, tallaProducto) {
+    // Obtener carrito del almacenamiento local
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+    // Encontrar el índice del producto en el carrito
+    const indiceProducto = carrito.findIndex(producto => producto.nombre === nombreProducto && producto.talla === tallaProducto);
+
+    if (indiceProducto !== -1) {
+        // Solicitar al usuario la nueva cantidad
+        const nuevaCantidad = prompt('Ingrese la nueva cantidad:');
+        const nuevaCantidadNumerica = parseInt(nuevaCantidad);
+
+        // Verificar si la nueva cantidad es válida
+        if (isNaN(nuevaCantidadNumerica) || nuevaCantidadNumerica <= 0) {
+            alert('La cantidad ingresada no es válida.');
+            return; // Salir de la función si la cantidad no es válida
+        }
+
+        // Verificar si la nueva cantidad excede el límite de 10
+        if (nuevaCantidadNumerica > 10) {
+            alert('No puedes agregar más de 10 elementos del mismo tipo.');
+            return; // Salir de la función si la cantidad excede el límite
+        }
+
+        // Actualizar la cantidad del producto en el carrito
+        carrito[indiceProducto].cantidad = nuevaCantidadNumerica.toString();
+
+        // Guardar el carrito actualizado en el almacenamiento local
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+
+        // Mostrar el carrito actualizado
+        mostrarCarrito();
+        actualizarCantidadCarrito();
+
+        // Mostrar mensaje de éxito
+        alert('¡La cantidad del producto ha sido modificada exitosamente!');
+    } else {
+        alert('El producto no se encontró en el carrito.');
     }
 }
 
@@ -195,18 +248,6 @@ function vaciarCarrito() {
 }
 // Llamar a la función para mostrar el carrito al cargar la página
 mostrarCarrito();
-
-// Función para abrir el pop-up con el formulario de compra
-function abrirFormulario() {
-    const formularioPopUp = document.getElementById('formulario-pop-up');
-    formularioPopUp.style.display = 'block';
-}
-
-// Función para cerrar el pop-up con el formulario de compra
-function cerrarFormulario() {
-    const formularioPopUp = document.getElementById('formulario-pop-up');
-    formularioPopUp.style.display = 'none';
-}
 
 // Función para abrir el pop-up con el formulario de compra
 function abrirFormulario() {
@@ -280,4 +321,3 @@ function cerrarModal() {
     const modal = document.getElementById('modal');
     modal.style.display = 'none';
 }
-

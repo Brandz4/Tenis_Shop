@@ -19,9 +19,9 @@
     </header>
 
     <nav class="navegacion">
-        <a class="navegacion__enlace navegacion__enlace--activo" href="index.html">Tienda</a>
+        <a class="navegacion__enlace" href="index.html">Tienda</a>
         <a class="navegacion__enlace" href="nosotros.html">Nosotros</a>
-        <a class="navegacion__enlace" href="carrito.html">Carrito</a>
+        <a class="navegacion__enlace navegacion__enlace--activo" href="carrito.html">Carrito</a>
     </nav>
 
     <main class="contenedor">
@@ -32,9 +32,9 @@
         <!-- Suma total de productos en el carrito -->
         <p id="suma-total"></p>
         <!-- Botón de compra en el carrito -->
-        <button id="btn-comprar" onclick="abrirFormulario()">Comprar</button>
+        <button class="formulario__submit boton-carrito" id="btn-comprar" onclick="abrirFormulario()">Comprar</button>
         <!-- Botón para vaciar el carrito -->
-        <button id="btn-vaciar-carrito" onclick="vaciarCarrito()">Vaciar Carrito</button>
+        <button class="formulario__submit boton-carrito" id="btn-vaciar-carrito" onclick="vaciarCarrito()">Vaciar Carrito</button>
     
         <div id="formulario-pop-up" class="formulario-pop-up">
             <div class="formulario-contenedor">
@@ -97,7 +97,7 @@
         <div class="modal-contenido">
             <span class="cerrar-modal" onclick="cerrarModal()">&times;</span>
             <h2>Compra realizada con éxito</h2>
-            <p>Su total de compra es: <span id="total-compra"></span>. Sus productos llegarán entre 2-5 días hábiles.</p>
+            <p>El total de su compra fue de: <span id="total-compra"></span>. Sus productos llegarán entre 2-5 días hábiles.</p>
         </div>
     </div>
     <script src="main.js"></script>

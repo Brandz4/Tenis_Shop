@@ -55,7 +55,7 @@
                         <option value="31.5 CM">31.5 CM</option>
                         <option value="32 CM">32 CM</option>
                     </select>                    
-                    <input name="cantidad" class="formulario__campo" type="number" placeholder="Cantidad" min="1">
+                    <input name="cantidad" id="cantidadInput" class="formulario__campo" type="number" placeholder="Cantidad" min="1" max="10" oninput="limitarCantidad()">
                     <input class="formulario__submit" type="button" value="Agregar al Carrito" onclick="agregarAlCarrito()">
                 </form>
             </div>

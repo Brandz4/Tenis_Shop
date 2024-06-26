@@ -1,5 +1,5 @@
 :root{
---primario: #9C27B0;
+    --primario: #9C27B0;
     --primarioOscuro:#89119d;
     --secundario:#FFCE00;
     --secundarioOscuro:rgb(233,287,2);
@@ -80,12 +80,20 @@ h3{ font-size: 2.4rem; }
 /* Navegacion */
 .navegacion {
     background-color: var(--primarioOscuro);
-    padding: 0 200px 0 200px;
+    gap: 1rem;
     display: flex;
     align-items: center; /* Centra verticalmente los elementos */
     justify-content: space-between; /* Distribuye los elementos horizontalmente */
+    flex-direction: column;
 }
-
+@media (min-Width: 768px) {
+    .navegacion {
+        flex-direction: row;
+        text-align: center;
+        padding-left: 5rem;
+        padding-right: 5rem;
+    }
+}
 .navegacion__enlace {
     font-family: var(--fuentePrincipal);
     color: var(--blanco);
@@ -95,29 +103,35 @@ h3{ font-size: 2.4rem; }
     position: relative;
     display: inline-block;
 }
+.navegacion__enlace--activo{
+    color: var(--secundario);
+}
+/* Barra de búsqueda */
+.navegacion__barra {
+    padding: 7px; /* Ajusta el relleno */
+    border: 1px solid #ccc; /* Agrega un borde */
+    border-radius: 5px; /* Agrega esquinas redondeadas */
+}
+@media (min-Width: 768px){
+    #busqueda{
+        width: 50rem;
+    }
+}
 
 .carrito-cantidad {
     position: absolute;
-    top: -10px;
-    right: -10px;
+    width: 2rem;
+    top: -2rem;
+    right: -2rem;
     background: var(--secundario);
     color: black;
-    border-radius: 50%;
-    padding: 2px 5px;
-    font-size: 12px;
-    font-weight: bold;
+    border-radius: 45%;
+    font-size: 2.5rem;
+    text-align: center;
 }
 
 .navegacion__enlace:hover {
     color: var(--secundario); /* Cambia el color al pasar el ratón */
-}
-
-/* Barra de búsqueda */
-#busqueda {
-    padding: 7px; /* Ajusta el relleno */
-    border: 1px solid #ccc; /* Agrega un borde */
-    border-radius: 5px; /* Agrega esquinas redondeadas */
-    width: 400px; /* Ajusta el ancho de la barra de búsqueda */
 }
 
 /*Grid*/
@@ -135,19 +149,22 @@ h3{ font-size: 2.4rem; }
 
 /*Productos*/
 .producto {
+    display: flex;
+    align-items: center;
+    text-align: center;
     background-color: var(--primarioOscuro);
     padding: 1rem;
 }
 .producto__imagen {
     width: 100%;
-    height: 90%;
-    max-height: 375px;
+    height: auto;
 }
 .producto__nombre {
-    font-size: 4rem;
+    font-size: 2rem;
+    align-items: center;
 }
 .producto__precio {
-    font-size: 2.8rem;
+    font-size: 2rem;
     color: var(--secundario);
 }
 .producto__nombre,
@@ -245,10 +262,6 @@ h3{ font-size: 2.4rem; }
     gap: 2rem;
 }
 .formulario__campo {
-    border-color: var(--primarioOscuro); /*Propiedad de CSS para definirle un color al borde del selec y el input*/
-    border-width: 1rem; /*Propiedad para definir el ancho del borde*/
-    border-style: solid; /*Pripiedad para hace rel borde solido o bien difinido*/
-
     border: 1rem solid var(--primarioOscuro); /*Forma para simplificar el código anterior, 1=tamaño, 2=estilo y 3=color*/
     background-color: var(--primario);
     color: var(--blanco);
@@ -273,17 +286,33 @@ h3{ font-size: 2.4rem; }
 }
 
 /* Estilos para cada producto en el carrito */
+.carrito{
+    display: grid;
+    gap: 2rem;
+    margin: 2rem;
+    text-align: center;
+    margin: 0 auto;
+    width: 35rem;
+}
 .producto-carrito {
     position: relative; /* Establecer posición relativa para el contenedor */
-    display: flex;
+    display: grid;
     align-items: center; /* Centra verticalmente el contenido */
     width: 100%; /* Ocupa toda la anchura disponible */
     background-color: #ececec;
     border-radius: 8px;
     border-color: #000;
     padding: 20px;
-    box-sizing: border-box;
-    margin-bottom: 20px; /* Espacio entre productos */
+}
+@media (min-Width: 768px) {
+    .producto-carrito{
+        display: flex;
+        margin: 0 auto;
+    }
+    .carrito{
+        text-align: left;
+        width: 70rem;
+    }
 }
 
 /* Estilos para la imagen del producto */
@@ -318,37 +347,21 @@ h3{ font-size: 2.4rem; }
     font-weight: bold;
     color: #777;
 }
-
-.btn-eliminar {
-    position: absolute; /* Establecer posición absoluta */
-    bottom: 5px; /* Espacio desde la parte inferior */
-    right: 5px; /* Espacio desde la parte derecha */
-    background-color: var(--secundario);
-    color: black;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
+.boton-carrito{
+    border: 10%;
 }
-
-/* Estilos para los botones */
-#btn-comprar,
-#btn-vaciar-carrito {
-    background-color: white;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-right: 10px; /* Añadimos un margen derecho para separar los botones */
+.boton-carrito-eliminar{
+    height: 4rem;
+    align-items: center;
+    font-size: 1.8rem;
+    padding: 1rem;
 }
-
-#btn-comprar:hover,
-#btn-vaciar-carrito:hover {
-    background-color: var(--secundario);;
+.boton-carrito-eliminar:hover{
+    border: .15rem solid var(--negro);
 }
-
+.boton-carrito:hover,.formulario__submit:hover{
+    background-color: var(--blanco);
+}
 
 /* Estilos para el pop-up del formulario */
 .formulario-pop-up {

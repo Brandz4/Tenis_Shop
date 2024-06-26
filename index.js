@@ -1,4 +1,5 @@
-fetch('https://talachudos.duckdns.org:3000/productos/productos')
+//Ruta para obtener los productos de la base de datos
+fetch('http://localhost:3000/productos/productos')
   .then(response => {
     if (!response.ok) {
       throw new Error('Error al obtener los productos');
@@ -9,6 +10,7 @@ fetch('https://talachudos.duckdns.org:3000/productos/productos')
     // Trabaja con los datos recibidos
     const contenedorProductos = document.querySelector('.grid'); // Selecciona el contenedor de productos por su clase "grid"
 
+    //Crear todos los productos el html
     productos.forEach(producto => {
         const divProducto = document.createElement('div');
         divProducto.classList.add('producto');
@@ -73,34 +75,29 @@ inputBusqueda.addEventListener('input', function() {
     });
 });
 
-// Agrega un event listener al input de búsqueda para detectar cuando está enfocado
+// Agrega un event listener al input de búsqueda para detectar cuando está enfocado la barra de busqueda
 inputBusqueda.addEventListener('focus', function() {
-    // Oculta los elementos que contienen los estilos a ocultar
     graficoCamisas.style.display = 'none';
     graficoNode.style.display = 'none';
+  
 });
 
-// Agrega un event listener al input de búsqueda para detectar cuando pierde el foco
+// Agrega un event listener al input de búsqueda para detectar cuando pierde el foco la barra
 inputBusqueda.addEventListener('blur', function() {
-    // Muestra los elementos que contienen los estilos a ocultar
-    graficoCamisas.style.display = 'block';
-    graficoNode.style.display = 'block';
+  // Verifica si el campo de búsqueda está vacío
+  const busqueda = inputBusqueda.value.trim().toLowerCase();
+  if (busqueda === '') {
+      // Muestra los elementos que contienen los estilos a ocultar
+      graficoCamisas.style.display = 'block';
+      graficoNode.style.display = 'block';
+  }
 });
 
-// Función para manejar la visualización de los gráficos según el estado del input de búsqueda
-function manejarVisualizacionGraficos() {
-    if (inputBusqueda.value.trim() !== '') {
-        graficoCamisas.style.display = 'none';
-        graficoNode.style.display = 'none';
-    } else {
-        graficoCamisas.style.display = 'block';
-        graficoNode.style.display = 'block';
-    }
-}
 
 let nombresProductos = []; // Declarar la variable fuera de las funciones
 
-fetch('https://talachudos.duckdns.org:3000/productos/productos')
+//Ruta para obtener los productos
+fetch('http://localhost:3000/productos/productos')
   .then(response => {
     if (!response.ok) {
       throw new Error('Error al obtener los productos');
@@ -146,6 +143,5 @@ function cargarOpcionesAutocompletado() {
 // Agregar un event listener al campo de búsqueda para detectar cambios en su valor
 document.getElementById('busqueda').addEventListener('input', cargarOpcionesAutocompletado);
 
-// Inicializa la visualización de los gráficos al cargar la página
-manejarVisualizacionGraficos();
+
 
